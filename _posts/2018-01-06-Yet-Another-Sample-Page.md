@@ -31,6 +31,39 @@ var fun = function lang(l) {
 }
 ```
 
+```py
+# Javascript code with syntax highlighting.
+import pandas as pd
+for i in range(3)
+
+```
+
+```c++
+// Javascript code with syntax highlighting.
+import pandas as pd
+for i in range(3)
+
+```
+
+
+```m
+% Javascript code with syntax highlighting.
+import pandas as pd
+for i in range(3)
+
+```
+
+
+```py
+# Javascript code with syntax highlighting.
+import pandas as pd
+for i in range(3)
+
+```
+
+
+
+
 ```ruby
 # Ruby code with syntax highlighting
 GitHubPages::Dependencies.gems.each do |gem, version|
