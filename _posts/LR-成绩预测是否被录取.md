@@ -1,0 +1,384 @@
+
+# LR-成绩预测是否被录取
+
+### >> 1. 按规定列进行数据表读取 (TXT读取无列名时，加入列名)
+
+
+```python
+import pandas as pd
+import os
+data_path = 'data' + os.sep + 'LogiReg_data.txt' # os.sep表示根据所处的平台，自行选择分割符
+pdData = pd.read_csv(path, header=None,names=['Exam 1', 'Exam 2', 'Admitted'] )
+pdData.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Exam 1</th>
+      <th>Exam 2</th>
+      <th>Admitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>34.623660</td>
+      <td>78.024693</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>30.286711</td>
+      <td>43.894998</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>35.847409</td>
+      <td>72.902198</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>60.182599</td>
+      <td>86.308552</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>79.032736</td>
+      <td>75.344376</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+pdData.shape
+```
+
+
+
+
+    (100, 3)
+
+
+
+
+```python
+Admitted_series = pdData['Admitted']
+print('coute when lable = 1：',Admitted_series[Admitted_series == 1].count())
+Admitted_series = pdData['Admitted']
+print('coute when lable = 0：',Admitted_series[Admitted_series == 0].count())
+```
+
+    coute when lable = 1： 60
+    coute when lable = 0： 40
+    
+
+数据集正样本和负样本数量差距不大，可以不进行上下采样
+
+### >> 2. 观察问题，用散点图表示二分类的两种样本点（因为只有两个特征，所以可以用散点图表示出来）
+
+
+```python
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+positive = pdData[pdData['Admitted'] == 1] # 用positive表示正样本
+negative = pdData[pdData['Admitted'] == 0] # 用negative表示负样本
+
+fig, ax = plt.subplots(figsize=(10,5))
+ax.scatter(positive['Exam 1'], positive['Exam 2'], s=30, c='b', marker='o', label='Admitted')
+ax.scatter(negative['Exam 1'], negative['Exam 2'], s=30, c='r', marker='x', label='Not Admitted')
+ax.legend()
+ax.set_xlabel('Exam 1 Score')
+ax.set_ylabel('Exam 2 Score')
+```
+
+
+
+
+    Text(0, 0.5, 'Exam 2 Score')
+
+
+
+
+![png](output_7_1.png)
+
+
+### >> 3. 预处理【数据 去除NAN值，洗牌，拆分】
+
+
+```python
+pdData_listings = pdData.dropna() #去除NAN值
+pdData_listings.shape
+```
+
+
+
+
+    (100, 3)
+
+
+
+
+```python
+dc_listings = pdData_listings.sample(frac = 1, random_state = 0) #洗牌
+```
+
+
+```python
+dc_listings.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Exam 1</th>
+      <th>Exam 2</th>
+      <th>Admitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>26</th>
+      <td>80.190181</td>
+      <td>44.821629</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>42.075455</td>
+      <td>78.844786</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>35.847409</td>
+      <td>72.902198</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>49.586677</td>
+      <td>59.808951</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>99.827858</td>
+      <td>72.369252</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+from sklearn.model_selection import train_test_split
+
+X = dc_listings.ix[:, dc_listings.columns != 'Admitted'] #标签跟特征便捷的切分方法
+y = dc_listings.ix[:, dc_listings.columns == 'Admitted']
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.2, random_state = 0)
+
+print('训练集样本数: ', len(X_train))
+print('测试集样本数: ', len(X_test))
+print('样本总数: ', len(X_train)+len(X_test))
+```
+
+    训练集样本数:  80
+    测试集样本数:  20
+    样本总数:  100
+    
+
+    d:\ProgramData\Anaconda3\lib\site-packages\ipykernel_launcher.py:3: DeprecationWarning: 
+    .ix is deprecated. Please use
+    .loc for label based indexing or
+    .iloc for positional indexing
+    
+    See the documentation here:
+    http://pandas.pydata.org/pandas-docs/stable/indexing.html#ix-indexer-is-deprecated
+      This is separate from the ipykernel package so we can avoid doing imports until
+    d:\ProgramData\Anaconda3\lib\site-packages\ipykernel_launcher.py:4: DeprecationWarning: 
+    .ix is deprecated. Please use
+    .loc for label based indexing or
+    .iloc for positional indexing
+    
+    See the documentation here:
+    http://pandas.pydata.org/pandas-docs/stable/indexing.html#ix-indexer-is-deprecated
+      after removing the cwd from sys.path.
+    
+
+### >> 4. LR 训练
+
+
+```python
+classifier = LogisticRegression()
+classifier.fit(X_train,y_train)
+```
+
+    d:\ProgramData\Anaconda3\lib\site-packages\sklearn\linear_model\logistic.py:433: FutureWarning: Default solver will be changed to 'lbfgs' in 0.22. Specify a solver to silence this warning.
+      FutureWarning)
+    d:\ProgramData\Anaconda3\lib\site-packages\sklearn\utils\validation.py:761: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
+      y = column_or_1d(y, warn=True)
+    
+
+
+
+
+    LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+              intercept_scaling=1, max_iter=100, multi_class='warn',
+              n_jobs=None, penalty='l2', random_state=None, solver='warn',
+              tol=0.0001, verbose=0, warm_start=False)
+
+
+
+### >> 5. LR 预测
+
+
+```python
+y_pred = classifier.predict(X_test)
+```
+
+### >> 4. 评估办法
+
+#### >> 1. 混淆矩阵评估办法
+
+
+```python
+# 构造混淆矩阵PLOT函数
+import numpy as np
+def plot_confusion_matrix(cm, classes,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    
+    #This function prints and plots the confusion matrix.
+
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=0)
+    plt.yticks(tick_marks, classes)
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, cm[i, j],
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+        
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+```
+
+
+```python
+# 计算混淆矩阵
+from sklearn.metrics import confusion_matrix
+cnf_matrix = confusion_matrix(y_test,y_pred)
+```
+
+
+```python
+# 画出混淆矩阵
+import itertools
+class_names = [0,1]
+plt.figure()
+plot_confusion_matrix(cnf_matrix
+                      , classes=class_names
+                      , title='Confusion matrix')
+plt.show()
+```
+
+
+![png](output_21_0.png)
+
+
+#### >> 2. 准确率
+
+
+```python
+correct = [1 if ((a == 1 and b == 1) or (a == 0 and b == 0)) else 0 for (a, b) in zip(y_test['Admitted'],y_pred)]
+# if (a == 1 and b == 1) or (a == 0 and b == 0)成立为1，否则为0；以（a,b）在(predictions, y)组成的元组中遍历
+accuracy = (sum(map(int, correct)) / len(correct))
+# map() 会根据提供的函数对指定序列做映射
+print ('准确率 = {0}%'.format(accuracy*100))
+
+```
+
+    准确率 = 90.0%
+    
+
+#### >> 2. 召回率
+
+
+```python
+from sklearn.metrics import recall_score #sklearn计算召回率方法
+recall_acc = recall_score(y_test['Admitted'].values,y_pred)
+recall_acc
+```
+
+
+
+
+    1.0
+
+
+
+
+```python
+cnf_matrix[1,1]/(cnf_matrix[1,0]+cnf_matrix[1,1]) # 通过混淆函数计算召回率方法
+```
+
+
+
+
+    1.0
+
+
