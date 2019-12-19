@@ -1,5 +1,5 @@
 ---
-layout: page/Introduction
+layout: frontpage
 ---
 
 ## 技术仓库
