@@ -1,5 +1,5 @@
 # Site settings
-title: Megres.Li's Website-5
+title: Megres.Li 个人网站
 email: Megres.li@foxmail.com
 description: Megres.Li's Introduction & Technology Blog
 # > # this means to ignore newlines until "baseurl:"
@@ -13,16 +13,16 @@ description: Megres.Li's Introduction & Technology Blog
 github_username: Listudystar
 permalink: /:year/:month/:day/:title/
 # this is the url root of the view source link on the footer page.
-viewsourceroot: https://github.com/LiXizhi/LiXizhi.github.io/blob/master/
+#viewsourceroot: https://github.com/LiXizhi/LiXizhi.github.io/blob/master/
 # this is the url root of the create page link on the footer page.
-newsourceroot: https://github.com/LiXizhi/LiXizhi.github.io/new/master
+#newsourceroot: https://github.com/LiXizhi/LiXizhi.github.io/new/master
 #########################################
 # for duoshuo.com commenting system, uncomment following line if you do not want to include duoshuo.com. 
 #duoshuo_shortname: lixizhi
 #duoshuo_url: "http://lixizhi.github.io"
 # disqus.com commenting system. please note that it is exclusive with duoshuo.com
-disqus_shortname: lixizhi
-disqus_url: "http://lixizhi.github.io"
+#disqus_shortname: lixizhi
+#disqus_url: "http://lixizhi.github.io"
 #########################################
 
 # Build settings

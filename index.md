@@ -4,5 +4,6 @@ layout: frontpage
 
 ## 技术仓库
 
-This is the place where I share my ideas on topics like [Paracraft](http://www.paracraft.cn) software design, artificial intelligence and education. 
-Feel free to send me emails or join our team. 
+仓库主要供Megres.Li个人技术资料收集与快速检索，并附有Github超链接（私有）。
+
+如有意向索取，请联系页面下方Email！
