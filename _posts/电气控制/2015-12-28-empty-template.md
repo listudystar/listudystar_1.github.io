@@ -1,9 +1,9 @@
 ---
 layout: post
 comments: true
-categories: 机器学习
+categories: 电气控制
 ---
 
-## Empty diary template
+## Empty npl tutorial template
 
 Empty post template

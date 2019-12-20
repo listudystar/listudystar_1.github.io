@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-categories: diary
+categories: 编程语言
 ---
 
 ## Empty diary template

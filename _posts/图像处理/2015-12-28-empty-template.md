@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-categories: npl
+categories: 图像工具
 ---
 
 ## Empty npl tutorial template

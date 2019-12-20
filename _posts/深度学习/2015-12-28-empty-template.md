@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-categories: npl
+categories: 深度学习
 ---
 
 ## Empty npl tutorial template
