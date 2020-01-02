@@ -1,9 +1,8 @@
-# LiXizhi's Personal Website
+# Lixuexing's Personal Website
 
-Runing on Github + Jekyll theme by [Gaohaoyang](https://github.com/Gaohaoyang/gaohaoyang.github.io)**
+包含：个人简历，工程项目和技术仓库 三个模块
 
-# KeepWork
-Create Your Own Personal Website in Markdown. Visit http://keepwork.com 
+Index是 技术仓库 模块，用于快速检索所需的知识
 
 
 
