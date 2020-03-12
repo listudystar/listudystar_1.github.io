@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-categories: 机器学习
+categories: 人工智能
 ---
 
 ## Empty diary template

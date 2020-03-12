@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-categories: 深度学习
+categories: 机器视觉
 ---
 
 ## Empty npl tutorial template

@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-categories: 电气控制
+categories: 机电一体
 ---
 
 ## Empty npl tutorial template
