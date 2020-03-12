@@ -1,3 +1,8 @@
+---
+layout: post
+comments: true
+categories: 系统环境
+---
 ##  Linux Screen用法
 
 Screen是一个可以在多个进程之间多路复用一个物理终端的全屏窗口管理器。Screen中有会话的概念，用户可以在一个会话中创建多个screen窗口，在每一个screen窗口中就像操作一个真实的telnet/SSH连接窗口那样。
